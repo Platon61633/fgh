@@ -3,9 +3,8 @@
 // import 'package:firebase_core/firebase_core.dart';
 // import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import '../home.dart';
 import 'login.dart';
 import 'auth_service.dart';
 // import 'package:http/http.dart' as http;
@@ -39,7 +38,6 @@ class _SigninState extends State<Signin> {
     // print(fetchUser().then((r)=>print(DateTime.fromMillisecondsSinceEpoch(int.parse(r.start_dt)))));
     print(DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch));
   }
-
 
   // Future<User> fetchUser() async {
   //   final response = await http.get(Uri.parse("http://192.168.1.52:3001/user/Fin"));
@@ -134,8 +132,9 @@ class _SigninState extends State<Signin> {
     // print(user);
     if (user==1) {
       log("User Created Succesfully");
+      // print();
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => Home(email: emailController.text,)),
       );
       setState(() {
         error_email = '';

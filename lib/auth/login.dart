@@ -3,8 +3,9 @@
 // import 'package:firebase_core/firebase_core.dart';
 import 'dart:developer';
 
+import 'package:fgh/DB/db_user.dart';
 import 'package:flutter/material.dart';
-import 'home.dart';
+import '../home.dart';
 import 'signin.dart';
 import 'auth_service.dart';
 
@@ -29,6 +30,19 @@ class _LoginState extends State<Login> {
     // print(password_Controller.text);
   }
 
+  void _loginWithToken(String email, String token)async{
+    int status = await _auth.loginUserWithTokenAndEmail(email, token);
+    if (status == 1) {
+      log("User Login Succesfully");
+      print(email);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => Home(email: email)),
+      );
+    }else{
+      log('User Not Login');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,14 +64,6 @@ class _LoginState extends State<Login> {
                   height: 3
                 )
               ),
-              // const Text(
-              //   'Login',
-              //   style: TextStyle(
-              //     fontStyle: FontStyle.italic,
-              //     fontSize: 25.0,
-              //     height: 2
-              //   )
-              // ),
               Column(
                 children: <Widget>[
                   input(email_Controller, 'email'),
@@ -70,7 +76,7 @@ class _LoginState extends State<Login> {
                   width: 180,
                   height: 42,
                   child: ElevatedButton(
-                      onPressed: _login,
+                      onPressed: ()=>_login(email_Controller.text, password_Controller.text),
                       child: const Text(
                         'Login',
                         style: const TextStyle(fontSize: 18),
@@ -87,7 +93,8 @@ class _LoginState extends State<Login> {
                   color: Theme.of(context).primaryColor,
                 )
               )
-                )
+                ),
+                // TextButton(onPressed: (){DB_user.instance.deleteUsers();}, child: Text('child'))
             ],
           )
         )
@@ -110,16 +117,22 @@ class _LoginState extends State<Login> {
               );
   }
 
-   _login() async {
-    int status = await _auth.loginUserWithEmailAndPassword(email_Controller.text, password_Controller.text);
-    print('object');
+  _login(email, password) async {
+    log('Login');
+    int status = await _auth.loginUserWithEmailAndPassword(email, password);
     if (status == 1) {
       log("User Login Succesfully");
+      print(email);
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => Home(email: email)),
       );
     }else{
       log('User Not Login');
     }
   }
 }
+
+// extension on Map<String, dynamic> {
+//    get email => null;
+//    get password => null;
+// }

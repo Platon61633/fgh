@@ -1,14 +1,19 @@
 class User {
-  int id;
-  String name;
-  String email;
-  String start_dt;
-  String last_online;
+  final String token;
+  final String email;
+  final String username;
 
-User.fromJson(Map<String, dynamic> json)
-      : id = json['id'] as int,
-        name = json['name'] as String,
-        email = json['email'] as String,
-        start_dt = json['start_dt'] as String,
-        last_online = json['last_online'] as String;
+  User({ required this.token, required this.email, required this.username});
+
+  Map<String, dynamic> toMap() {
+    return { 'token': token, 'email': email, 'username': username};
+  }
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      token: map['token'],
+      email: map['email'],
+      username: map['username'],
+    );
+  }
 }
